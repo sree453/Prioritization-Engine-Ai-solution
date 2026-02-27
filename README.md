@@ -7,17 +7,21 @@ System architecture and decision logic for an AI-driven notification engine—ha
 
 ```mermaid
 graph TD
-    classDef client fill:#f9f,stroke:#333,stroke-width:2px;
-    classDef service fill:#fff,stroke:#333,stroke-width:2px;
+    %% Global Styles
+    classDef client fill:#b3e5fc,stroke:#01579b,stroke-width:2px;
+    classDef service fill:#ffffff,stroke:#333333,stroke-width:2px;
     classDef storage fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
     classDef engine fill:#fff9c4,stroke:#fbc02d,stroke-width:2px;
     classDef outcome fill:#dcedc8,stroke:#33691e,stroke-width:2px;
 
+    %% Architecture Flow
     Start((Client Services)):::client --> Gateway[API Gateway]:::service
     Gateway --> Ingest[Ingestion Service]:::service
     Ingest --> Kafka[(Message Queue: Kafka)]:::storage
     
-    subgraph Processing_Layer [Core Processing Logic]
+    %% Added padding to subgraph to prevent title overwriting
+    subgraph Processing_Layer ["&nbsp;&nbsp;&nbsp; Core Processing Logic &nbsp;&nbsp;&nbsp;"]
+        direction TB
         Kafka --> Dedupe[Deduplication Layer: Redis]:::storage
         Dedupe --> AI[Prioritization Engine: Rules + AI]:::engine
         AI --> Log[Explanation Logger]:::service
@@ -25,9 +29,18 @@ graph TD
 
     Log --> Router{Decision Router}:::engine
 
+    %% Decision Branches
     Router -->|High Priority| Now[NOW: Dispatcher]:::outcome
     Router -->|Medium/Low| Later[LATER: Scheduler]:::outcome
-    Router -->|Redundant/Low Value| Never[NEVER: Suppressed]:::outcome
+    Router -->|Redundant| Never[NEVER: Suppressed]:::outcome
 
+    %% Final Delivery
     Now --> User((User Notification)):::client
     Later --> DB[(Storage for Digest)]:::storage
+
+    %% Force larger box sizes to prevent text overlap
+    style Gateway min-width:150px
+    style Ingest min-width:150px
+    style Dedupe min-width:200px
+    style AI min-width:200px
+    style Log min-width:150px
