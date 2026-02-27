@@ -45,6 +45,8 @@ graph TD
     style AI min-width:200px
     style Log min-width:150px
 
+```
+
 2. Decision Logic Design
 To solve the problem of alert fatigue , the engine evaluates every incoming notification through a multi-stage classification process
 
