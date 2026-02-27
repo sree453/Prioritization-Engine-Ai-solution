@@ -44,3 +44,16 @@ graph TD
     style Dedupe min-width:200px
     style AI min-width:200px
     style Log min-width:150px
+
+2. Decision Logic Design
+To solve the problem of alert fatigue , the engine evaluates every incoming notification through a multi-stage classification process
+
+Classification Strategy
+
+NOW (Immediate): Reserved for time-sensitive alerts, critical system events, or high-priority messages.
+
+
+LATER (Deferred): Notifications that are valid but arrive during high-frequency periods or are low-priority/promotional. These are scheduled for later delivery or batched into digests
+
+
+NEVER (Suppressed): Applied to exact duplicates, near-duplicates, or content that has expired.
